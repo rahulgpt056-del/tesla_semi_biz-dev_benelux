@@ -1,15 +1,17 @@
-# Tesla Semi · Benelux — TCO & Duty-Cycle Calculator
+# Tesla Semi · Benelux — BD Portfolio (TCO Calculator + Territory Map)
 
-A self-updating business case tool for evaluating Tesla Semi fleet conversions
-in the Benelux market (NL primary). Built as part of a portfolio supporting an
-application to Tesla's **Business Development Manager, Semi — Benelux**
-role (Req. ID 267880).
+Two self-updating business-development tools for evaluating and prioritising
+Tesla Semi fleet conversions in the Benelux market (NL primary). Built as part
+of a portfolio supporting an application to Tesla's **Business Development
+Manager, Semi — Benelux** role (Req. ID 267880).
 
-**Live app:** _add Streamlit Community Cloud URL here after deploying_
+**Live apps:** _add Streamlit Community Cloud URLs here after deploying_
 
 ---
 
-## What this is
+## Project 1 — TCO & Duty-Cycle Calculator
+
+### What this is
 
 A three-part model that turns a prospect's fleet profile (size, daily
 distance, payload, route type, depot setup) into:
@@ -40,7 +42,7 @@ This tool answers all three from a handful of inputs, using public
 Dutch/Benelux pricing and policy data — so a BD conversation can move from
 "interesting" to "here's your number" in the same meeting.
 
-## Running locally
+### Running locally
 
 ```bash
 pip install -r requirements.txt
@@ -49,7 +51,7 @@ streamlit run app/streamlit_app.py
 
 Open the URL Streamlit prints (default `http://localhost:8501`).
 
-## Running the tests
+### Running the tests
 
 ```bash
 python tests/test_tco_engine.py
@@ -59,7 +61,7 @@ python tests/test_tco_engine.py
 charging/energy scaling, duty-cycle fit logic, and TCO/payback economics
 against a hand-checked reference case.
 
-## Regenerating the Excel model
+### Regenerating the Excel model
 
 ```bash
 python scripts/build_excel_model.py
@@ -87,11 +89,69 @@ NL industrial electricity (Eurostat/Intratec), NL diesel pump price
 (GlobalPetrolPrices), AanZET (RVO), vrachtwagenheffing tariff, and Tesla's
 published Semi efficiency/range/Megacharger specs.
 
+---
+
+## Project 2 — Target-Account Territory Map
+
+### What this is
+
+A tiered (A/B/C) map of ~35 Benelux fleet operators — national parcel/grocery
+networks, 3PLs, FMCG distributors, and bulk/port hauliers — scored on how well
+their operations fit a Tesla Semi duty cycle: regional/depot-return share,
+depot charging feasibility, fleet scale, and sustainability mandate.
+
+| Component | Purpose |
+|---|---|
+| [`data/accounts.json`](data/accounts.json) | Seed dataset of target accounts and their fit signals |
+| [`engine/account_scoring.py`](engine/account_scoring.py) | Scoring + tiering logic, unit tested |
+| [`app/territory_app.py`](app/territory_app.py) | Interactive map + filterable account list + sequencing plan |
+| [`scripts/enrich_accounts.py`](scripts/enrich_accounts.py) | Optional live enrichment via Apify (LinkedIn) or Apollo.io |
+
+### Why it exists
+
+A BD territory plan is only useful if it's prioritised. This tool turns public
+signals about a fleet operator's network (depot-based vs. long-haul, existing
+EV pilots, sustainability commitments) into a ranked outreach order — so the
+first 10 conversations are the ones most likely to produce a "Fit" result in
+the [TCO & Duty-Cycle Calculator](#project-1--tco--duty-cycle-calculator).
+
+### Running locally
+
+```bash
+streamlit run app/territory_app.py
+```
+
+### Running the tests
+
+```bash
+python -m pytest tests/test_account_scoring.py -v
+```
+
+8 tests cover the tiering thresholds, scoring weights, sorting, and the
+real seed dataset (35 accounts across NL/BE/LU).
+
+### Enriching with live data (optional)
+
+`scripts/enrich_accounts.py` is a no-op until you set `APIFY_TOKEN` or
+`APOLLO_API_KEY`. With either set, it adds an `enrichment` block per account
+(employee count, industry, LinkedIn/website URL) without overwriting the
+hand-curated fit-scoring fields — use it to sanity-check or refine
+`fleet_scale` and `sustainability_signal` before re-running the scoring.
+
+```bash
+APIFY_TOKEN=xxxx python scripts/enrich_accounts.py
+# or
+APOLLO_API_KEY=xxxx python scripts/enrich_accounts.py
+```
+
+---
+
 ## Deploying
 
 1. Push this repo to GitHub.
-2. On [Streamlit Community Cloud](https://share.streamlit.io), create a new
-   app pointing at `app/streamlit_app.py` on the `main` branch.
+2. On [Streamlit Community Cloud](https://share.streamlit.io), create one app
+   per entry point: `app/streamlit_app.py` (TCO calculator) and
+   `app/territory_app.py` (territory map), both on the `main` branch.
 3. Add the repo's GitHub Actions workflow — no extra secrets are required
    for the current (keep-last-good) refresh script.
 
@@ -99,14 +159,23 @@ published Semi efficiency/range/Megacharger specs.
 
 ```
 tesla-semi-benelux/
-├── app/streamlit_app.py          # web app
-├── engine/tco_engine.py          # calculation core
-├── tests/test_tco_engine.py      # 22 unit tests
-├── model/                         # generated Excel model
+├── app/
+│   ├── streamlit_app.py          # P1: TCO & duty-cycle web app
+│   └── territory_app.py          # P2: target-account territory map
+├── engine/
+│   ├── tco_engine.py             # P1 calculation core
+│   └── account_scoring.py        # P2 scoring/tiering core
+├── tests/
+│   ├── test_tco_engine.py        # 22 unit tests
+│   └── test_account_scoring.py   # 8 unit tests
+├── model/                         # generated Excel model (P1)
 ├── scripts/
 │   ├── build_excel_model.py      # regenerates the Excel model
-│   └── refresh_prices.py         # weekly price refresh
-├── data/assumptions.json         # shared, refreshable inputs
+│   ├── refresh_prices.py         # weekly price refresh (P1)
+│   └── enrich_accounts.py        # optional live enrichment (P2)
+├── data/
+│   ├── assumptions.json          # P1 shared, refreshable inputs
+│   └── accounts.json             # P2 target-account seed data
 ├── .github/workflows/refresh-prices.yml
 └── requirements.txt
 ```
