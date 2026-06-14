@@ -5,7 +5,9 @@ Tesla Semi fleet conversions in the Benelux market (NL primary). Built as part
 of a portfolio supporting an application to Tesla's **Business Development
 Manager, Semi — Benelux** role (Req. ID 267880).
 
-**Live apps:** _add Streamlit Community Cloud URLs here after deploying_
+**Live apps:**
+- [TCO & Duty-Cycle Calculator](https://tco-and-duty-cycle-calculator.streamlit.app/)
+- [Target-Account Territory Map](https://target-account-territory-map.streamlit.app/)
 
 ---
 
