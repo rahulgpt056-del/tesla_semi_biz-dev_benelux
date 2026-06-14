@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Build artefacts (keep source .js, ignore generated office temp files)
+*.tmp
+~$*.docx
+~$*.xlsx
+
+# Node (used only to generate the guide)
+node_modules/
+
+# Personal application strategy docs — not part of the public project
+docs/

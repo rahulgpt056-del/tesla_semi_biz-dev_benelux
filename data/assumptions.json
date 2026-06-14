@@ -1,0 +1,27 @@
+{
+  "_meta": {
+    "description": "Volatile, refreshable public assumptions for the Tesla Semi Benelux TCO engine. The weekly GitHub Action overwrites the priced fields; policy fields are edited by hand when legislation changes.",
+    "market": "Netherlands (primary) / Benelux",
+    "last_updated": "2026-06-14",
+    "refresh_source": "GitHub Actions weekly cron (see .github/workflows/refresh-prices.yml)"
+  },
+  "energy_prices": {
+    "electricity_eur_per_kwh": 0.137,
+    "diesel_eur_per_litre": 2.15,
+    "_sources": "NL industrial electricity (Eurostat/Intratec); NL diesel pump (GlobalPetrolPrices)"
+  },
+  "policy": {
+    "aanzet_subsidy_eur_per_truck": 38000,
+    "aanzet_notes": "Aanschafsubsidie Zero-Emissie Trucks (AanZET) — indicative per-vehicle grant for a heavy ZE tractor unit; varies by GVW class and annual budget round. Confirm current round at RVO before external use.",
+    "truck_toll_eur_per_km": 0.167,
+    "truck_toll_applies_to_zero_emission": false,
+    "truck_toll_notes": "Dutch vrachtwagenheffing, live 2026. Indicative average tariff for a heavy tractor-trailer. Diesel trucks pay; zero-emission trucks are expected to receive a reduced/zero tariff (revenue recycled into freight greening). Confirm exact tariff band."
+  },
+  "vehicle": {
+    "semi_kwh_per_km_base": 1.1,
+    "semi_range_km": 800,
+    "megacharger_max_kw": 1200,
+    "semi_efficiency_notes": "~1.1 kWh/km (~1.7 kWh/mile, PepsiCo real-world). MCS Megacharger up to 1.2 MW.",
+    "diesel_l_per_100km": 32.0
+  }
+}
