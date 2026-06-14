@@ -19,5 +19,8 @@ Thumbs.db
 # Node (used only to generate the guide)
 node_modules/
 
-# Personal application strategy docs — not part of the public project
-docs/
+# Personal application documents and the strategy-guide generator — not part
+# of the public project. The 90-day deck / playbook generators are tracked.
+docs/*.docx
+docs/*.pptx
+docs/build-guide.js
