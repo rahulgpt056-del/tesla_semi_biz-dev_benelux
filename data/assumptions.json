@@ -2,7 +2,7 @@
   "_meta": {
     "description": "Volatile, refreshable public assumptions for the Tesla Semi Benelux TCO engine. The weekly GitHub Action overwrites the priced fields; policy fields are edited by hand when legislation changes.",
     "market": "Netherlands (primary) / Benelux",
-    "last_updated": "2026-06-15",
+    "last_updated": "2026-06-22",
     "refresh_source": "GitHub Actions weekly cron (see .github/workflows/refresh-prices.yml)"
   },
   "energy_prices": {
